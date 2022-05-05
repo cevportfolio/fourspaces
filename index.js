@@ -4,8 +4,7 @@
     - No any smart search, use String method contains (case sensitive/insensitive - does not matter)
     –   Performance optimizations are optional
     */
-    if (!localStorage.getItem('products')) localStorage.setItem('products', JSON.stringify([]))
-
+    var productsLocalStorage = new Array();
     var ShopImpl = (function () {
       function ShopImpl() {}
 
@@ -15,26 +14,20 @@
         - Returns: false if the product with same id already exists in the Shop, true – otherwise.
       */
       ShopImpl.prototype.addNewProduct = function (product) {
-        // console.log("products length: " + localStorage.getItem('products').length);
         // TODO: your implementation goes here
-        var productsLocalStorage = JSON.parse(localStorage.getItem('products'));
-        // console.log(productsLocalStorage.length);
         var prod = {id: product.id, name: product.name, producer: product.producer};
         if (productsLocalStorage.length > 0) {
-            // console.log("length: " + productsLocalStorage.length);
           for (key in productsLocalStorage) {
-            // console.log(product.id + " " + productsLocalStorage[key].id);
             if (product.id == productsLocalStorage[key].id) {
               return false;
             } else {
               productsLocalStorage.push(prod);
-              localStorage.setItem('products', JSON.stringify(productsLocalStorage));
               return true;
             }
           }          
         } else {
           productsLocalStorage.push(prod);
-          localStorage.setItem('products', JSON.stringify(productsLocalStorage));
+          console.log(productsLocalStorage);
           return true;
         }
       };
@@ -45,7 +38,6 @@
       */
       ShopImpl.prototype.deleteProduct = function (itemID) {
         // TODO: your implementation goes here
-        var productsLocalStorage = JSON.parse(localStorage.getItem('products'));
         if (productsLocalStorage.length > 0) {
           for (key in productsLocalStorage) {
             if (itemID == productsLocalStorage[key].id) {
@@ -53,7 +45,8 @@
               arr = arr.filter(function(item) {
                   return item.id !== itemID;
               })
-              localStorage.setItem('products', JSON.stringify(arr));
+              productsLocalStorage = [...arr];
+              console.log(productsLocalStorage);
               return true;
             }
           }
@@ -69,7 +62,6 @@
       */
       ShopImpl.prototype.listProductsByName = function (searchString) {
         // TODO: your implementation goes here
-        let productsLocalStorage = JSON.parse(localStorage.getItem('products'));
         let arrName = new Array();
         let arrFull = new Array();
         let result = new Array();
@@ -110,7 +102,6 @@
       */
       ShopImpl.prototype.listProductsByProducer = function (searchString) {
         // TODO: your implementation goes here
-        let productsLocalStorage = JSON.parse(localStorage.getItem('products'));
         let arrName = new Array();
         let arrProducer = new Array();
         let arrID = new Array();
